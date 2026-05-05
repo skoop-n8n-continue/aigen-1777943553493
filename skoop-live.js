@@ -438,22 +438,42 @@
     },
   };
 
-  // Apply on initial page load — runs after the page's own init() has built
-  // the DOM. Listens for DOMContentLoaded so it doesn't matter where this
-  // script is included relative to the page's main script.
+  // Apply on initial page load — two mechanisms depending on context:
+  //
+  // 1. Dirty data (srcdoc Tier 2 preview): __skoop_dirty_data__ is set before
+  //    the page's script runs, so apply it immediately.
+  //
+  // 2. Normal S3 load: the fetch shim stashes the data.json response in
+  //    __skoop_initial_data__. We watch #app-container for the '.loaded' class
+  //    (added by init() when it finishes building the DOM) and apply all
+  //    data-bind-* bindings at that point — including show/hide initial states.
+  //    This is automatic for every app without requiring any app code change.
   function applyFromInjectedOrFetch() {
     if (window.__skoop_dirty_data__) {
       window.SkoopLive.apply(window.__skoop_dirty_data__);
       return;
     }
-    // Fallback: if the app called window.SkoopLive.apply(data) before this
-    // function ran (e.g. via a race), the data is already applied. If the app
-    // exposes window.__skoop_data__ (e.g. for debugging), apply it now.
-    // Normal path: app calls SkoopLive.apply(data) explicitly in its own
-    // init() just before classList.add('loaded'), which is the canonical pattern.
-    if (window.__skoop_data__) {
-      window.SkoopLive.apply(window.__skoop_data__);
+    // Watch for .loaded class on #app-container to auto-apply initial bindings
+    // once the app's async init() has finished building the DOM.
+    var appEl = document.getElementById('app-container');
+    if (!appEl) return;
+    // Already loaded (e.g. synchronous init)
+    if (appEl.classList.contains('loaded') && window.__skoop_initial_data__) {
+      window.SkoopLive.apply(window.__skoop_initial_data__);
+      return;
     }
+    var loadedObs = new MutationObserver(function (mutations) {
+      for (var m = 0; m < mutations.length; m++) {
+        if (mutations[m].target.classList && mutations[m].target.classList.contains('loaded')) {
+          loadedObs.disconnect();
+          if (window.__skoop_initial_data__) {
+            window.SkoopLive.apply(window.__skoop_initial_data__);
+          }
+          return;
+        }
+      }
+    });
+    loadedObs.observe(appEl, { attributes: true, attributeFilter: ['class'] });
   }
 
   // After the page's own init() has built the DOM, report which data paths are
