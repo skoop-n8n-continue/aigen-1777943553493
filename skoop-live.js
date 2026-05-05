@@ -5,7 +5,7 @@
 //   1. Tier 2 srcdoc preview: when __skoop_dirty_data__ is set (injected by
 //      the configurator into the srcdoc <head>), return it directly so the
 //      page renders unsaved changes without an S3 round-trip.
-//   2. Normal S3 load: stash the real data.json response in
+//   2. Normal S3 load: stash a Promise for the data.json response in
 //      __skoop_initial_data__ so the runtime can apply all data-bind-*
 //      bindings (including show/hide) automatically after init() finishes.
 // This shim is in skoop-live.js (not an inline <script>) so it is always
@@ -19,22 +19,19 @@
       var url = typeof input === 'string' ? input : (input && input.url) || '';
       if (/(^\.\/)?(data\.json)(\?.*)?$/.test(url) || /(^|\/)data\.json(\?.*)?$/.test(url)) {
         if (dirty) {
-          window.__skoop_initial_data__ = dirty;
+          window.__skoop_initial_data__ = Promise.resolve(dirty);
           var body = JSON.stringify(dirty);
           return Promise.resolve(new Response(body, {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
           }));
         }
-        // Normal load: pass through and stash the response data
+        // Normal load: pass through and stash a promise that resolves with the data
         var p = origFetch ? origFetch(input, init) : Promise.reject(new Error('fetch unavailable'));
-        return p.then(function (response) {
-          var cloned = response.clone();
-          cloned.json().then(function (data) {
-            window.__skoop_initial_data__ = data;
-          }).catch(function () {});
-          return response;
-        });
+        window.__skoop_initial_data__ = p.then(function (response) {
+          return response.clone().json();
+        }).catch(function () { return null; });
+        return p;
       }
     } catch (e) {}
     return origFetch ? origFetch(input, init) : Promise.reject(new Error('fetch unavailable'));
@@ -494,22 +491,31 @@
       window.SkoopLive.apply(window.__skoop_dirty_data__);
       return;
     }
+    
+    function applyDataPromise() {
+      if (window.__skoop_initial_data__ && typeof window.__skoop_initial_data__.then === 'function') {
+        window.__skoop_initial_data__.then(function (data) {
+          if (data) window.SkoopLive.apply(data);
+        });
+      } else if (window.__skoop_initial_data__) {
+        window.SkoopLive.apply(window.__skoop_initial_data__);
+      }
+    }
+
     // Watch for .loaded class on #app-container to auto-apply initial bindings
     // once the app's async init() has finished building the DOM.
     var appEl = document.getElementById('app-container');
     if (!appEl) return;
     // Already loaded (e.g. synchronous init)
-    if (appEl.classList.contains('loaded') && window.__skoop_initial_data__) {
-      window.SkoopLive.apply(window.__skoop_initial_data__);
+    if (appEl.classList.contains('loaded')) {
+      applyDataPromise();
       return;
     }
     var loadedObs = new MutationObserver(function (mutations) {
       for (var m = 0; m < mutations.length; m++) {
         if (mutations[m].target.classList && mutations[m].target.classList.contains('loaded')) {
           loadedObs.disconnect();
-          if (window.__skoop_initial_data__) {
-            window.SkoopLive.apply(window.__skoop_initial_data__);
-          }
+          applyDataPromise();
           return;
         }
       }
