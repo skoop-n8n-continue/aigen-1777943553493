@@ -16,7 +16,7 @@
       "show_announcements": {
         "type": "boolean",
         "label": "Show Announcements",
-        "value": true
+        "value": false
       },
       "display_mode": {
         "type": "enum",
