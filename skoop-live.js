@@ -439,23 +439,36 @@
   };
 
   // Apply on initial page load — runs after the page's own init() has built
-  // the DOM. Listens for DOMContentLoaded so it doesn't matter where this
-  // script is included relative to the page's main script.
+  // the DOM. Handles two cases:
+  //   1. srcdoc preview reload: __skoop_dirty_data__ is already set — apply it.
+  //   2. Normal S3 load: the prescript stashes the data.json response in
+  //      __skoop_data__ and fires 'skoop:data-ready'. If the data is already
+  //      available when this runs (fetch completed before DOMContentLoaded),
+  //      apply it immediately. Otherwise listen for the event.
+  // This ensures data-bind-show / data-bind-hide (and all other bindings)
+  // reflect the saved data.json values on the initial page load — without
+  // this, elements with data-bind-show="app_settings.show_clock" would remain
+  // visible even when show_clock is saved as false.
   function applyFromInjectedOrFetch() {
     if (window.__skoop_dirty_data__) {
       window.SkoopLive.apply(window.__skoop_dirty_data__);
       return;
     }
-    // The page's own init() already fetched and applied data.json. We don't
-    // re-fetch here — bindings are applied on the existing DOM that init()
-    // built, using the same data the page already loaded. To do that we
-    // intercept the fetch and stash the result, OR we just wait for the
-    // page to set window.__skoop_data__ if it chooses to expose it. Most
-    // apps won't, so we no-op here on initial load — bindings are inert
-    // until the configurator sends a postMessage update.
-    //
-    // The only critical case is when dirty data is already set (preview
-    // reload via srcdoc), and that's handled above.
+    if (window.__skoop_data__) {
+      window.SkoopLive.apply(window.__skoop_data__);
+      return;
+    }
+    // data.json fetch not yet complete — wait for the prescript to signal it
+    document.addEventListener('skoop:data-ready', function onDataReady() {
+      document.removeEventListener('skoop:data-ready', onDataReady);
+      // Small delay so the app's own init() can finish rendering the DOM
+      // (e.g. appending collection cards) before we apply bindings on top.
+      setTimeout(function() {
+        if (window.__skoop_data__) {
+          window.SkoopLive.apply(window.__skoop_data__);
+        }
+      }, 50);
+    });
   }
 
   // After the page's own init() has built the DOM, report which data paths are
