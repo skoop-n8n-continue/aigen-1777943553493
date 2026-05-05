@@ -6,22 +6,22 @@
       "show_clock": {
         "type": "boolean",
         "label": "Show Clock",
-        "value": true
+        "value": false
       },
       "show_ticker": {
         "type": "boolean",
         "label": "Show Ticker",
-        "value": false
+        "value": true
       },
       "show_announcements": {
         "type": "boolean",
         "label": "Show Announcements",
-        "value": false
+        "value": true
       },
       "display_mode": {
         "type": "enum",
         "label": "Announcement Layout",
-        "value": "list",
+        "value": "grid",
         "meta": {
           "options": [
             "grid",
@@ -37,7 +37,7 @@
       "hero_headline": {
         "type": "text",
         "label": "Hero Headline",
-        "value": "Welcomefeeascasc"
+        "value": "Welcomefeeassdfsscasc"
       },
       "hero_subtitle": {
         "type": "text",
@@ -60,27 +60,27 @@
       "hero_text_color": {
         "type": "color",
         "label": "Hero Text Color",
-        "value": "#ffffff"
+        "value": "#000000"
       },
       "primary_color": {
         "type": "color",
         "label": "Primary Color",
-        "value": "#1a1a2e"
+        "value": "#000000"
       },
       "header_text_color": {
         "type": "color",
         "label": "Header Text Color",
-        "value": "#ffffff"
+        "value": "#000000"
       },
       "accent_color": {
         "type": "color",
         "label": "Accent Color",
-        "value": "#e94560"
+        "value": "#000000"
       },
       "ticker_bg_color": {
         "type": "color",
         "label": "Ticker Background Color",
-        "value": "#0f3460"
+        "value": "#000000"
       }
     },
     "announcements": {
@@ -118,18 +118,18 @@
       },
       "value": [
         {
+          "id": "ann_a1b2c3",
+          "title": "Flash Sale Today",
+          "body": "sdfsdfdfsdf",
+          "card_color": "#9c777d",
+          "card_image": "assets/ann_a1b2c3_card_image.png"
+        },
+        {
           "id": "ann_d4e5f6",
           "title": "New Arrivals",
           "body": "Check out our fresh inventory just in — over 50 new products this week.",
           "card_color": "#0f3460",
           "card_image": "assets/ann_d4e5f6_card_image_g7h8i9.jpg"
-        },
-        {
-          "id": "ann_a1b2c3",
-          "title": "Flash Sale Today",
-          "body": "20% off all items until 6pm. Use code FLASH20 at checkout.",
-          "card_color": "#e94560",
-          "card_image": "assets/ann_a1b2c3_card_image_d4e5f6.jpg"
         },
         {
           "id": "ann_g7h8i9",
