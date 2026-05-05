@@ -6,7 +6,7 @@
       "show_clock": {
         "type": "boolean",
         "label": "Show Clock",
-        "value": false
+        "value": true
       },
       "show_ticker": {
         "type": "boolean",
