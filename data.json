@@ -6,12 +6,12 @@
       "show_clock": {
         "type": "boolean",
         "label": "Show Clock",
-        "value": false
+        "value": true
       },
       "show_ticker": {
         "type": "boolean",
         "label": "Show Ticker",
-        "value": false
+        "value": true
       },
       "show_announcements": {
         "type": "boolean",
