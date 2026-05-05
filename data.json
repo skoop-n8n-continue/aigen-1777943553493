@@ -6,7 +6,7 @@
       "show_clock": {
         "type": "boolean",
         "label": "Show Clock",
-        "value": true
+        "value": false
       },
       "show_ticker": {
         "type": "boolean",
@@ -32,17 +32,17 @@
       "ticker_message": {
         "type": "text",
         "label": "Ticker Message",
-        "value": "Welcome to our store — Today's specials are now available — Ask a team member for details"
+        "value": "Weeelcoewfwefme to our store — Today's specials are now available — Ask a team member for details"
       },
       "hero_headline": {
         "type": "text",
         "label": "Hero Headline",
-        "value": "Welcomeascasc"
+        "value": "Welcomefeeascasc"
       },
       "hero_subtitle": {
         "type": "text",
         "label": "Hero Subtitle",
-        "value": "Check out our latest announcements below"
+        "value": "Check out oefwweur latest announcements below"
       },
       "hero_image": {
         "type": "file",
