@@ -3,38 +3,141 @@
   "document_version": 1,
   "sections": {
     "app_settings": {
-      "show_clock": { "type": "boolean", "label": "Show Clock", "value": true },
-      "show_ticker": { "type": "boolean", "label": "Show Ticker", "value": true },
-      "show_announcements": { "type": "boolean", "label": "Show Announcements", "value": true },
-      "display_mode": {
-        "type": "enum", "label": "Announcement Layout",
-        "value": "grid",
-        "meta": { "options": ["grid", "list"] }
+      "show_clock": {
+        "type": "boolean",
+        "label": "Show Clock",
+        "value": false
       },
-      "ticker_message": { "type": "text", "label": "Ticker Message", "value": "Welcome to our store — Today's specials are now available — Ask a team member for details" },
-      "hero_headline": { "type": "text", "label": "Hero Headline", "value": "Welcome" },
-      "hero_subtitle": { "type": "text", "label": "Hero Subtitle", "value": "Check out our latest announcements below" },
-      "hero_image": { "type": "file", "label": "Hero Background Image", "value": "assets/hero_image_a1b2c3.jpg", "meta": { "accepted_formats": ["jpg","png","webp"], "path": "assets/" } },
-      "hero_text_color": { "type": "color", "label": "Hero Text Color", "value": "#ffffff" },
-      "primary_color": { "type": "color", "label": "Primary Color", "value": "#1a1a2e" },
-      "header_text_color": { "type": "color", "label": "Header Text Color", "value": "#ffffff" },
-      "accent_color": { "type": "color", "label": "Accent Color", "value": "#e94560" },
-      "ticker_bg_color": { "type": "color", "label": "Ticker Background Color", "value": "#0f3460" }
+      "show_ticker": {
+        "type": "boolean",
+        "label": "Show Ticker",
+        "value": true
+      },
+      "show_announcements": {
+        "type": "boolean",
+        "label": "Show Announcements",
+        "value": true
+      },
+      "display_mode": {
+        "type": "enum",
+        "label": "Announcement Layout",
+        "value": "list",
+        "meta": {
+          "options": [
+            "grid",
+            "list"
+          ]
+        }
+      },
+      "ticker_message": {
+        "type": "text",
+        "label": "Ticker Message",
+        "value": "Welcome to our store — Today's specials are now available — Ask a team member for details"
+      },
+      "hero_headline": {
+        "type": "text",
+        "label": "Hero Headline",
+        "value": "Welcomeascasc"
+      },
+      "hero_subtitle": {
+        "type": "text",
+        "label": "Hero Subtitle",
+        "value": "Check out our latest announcements below"
+      },
+      "hero_image": {
+        "type": "file",
+        "label": "Hero Background Image",
+        "value": "assets/hero_image.png",
+        "meta": {
+          "accepted_formats": [
+            "jpg",
+            "png",
+            "webp"
+          ],
+          "path": "assets/"
+        }
+      },
+      "hero_text_color": {
+        "type": "color",
+        "label": "Hero Text Color",
+        "value": "#ffffff"
+      },
+      "primary_color": {
+        "type": "color",
+        "label": "Primary Color",
+        "value": "#1a1a2e"
+      },
+      "header_text_color": {
+        "type": "color",
+        "label": "Header Text Color",
+        "value": "#ffffff"
+      },
+      "accent_color": {
+        "type": "color",
+        "label": "Accent Color",
+        "value": "#e94560"
+      },
+      "ticker_bg_color": {
+        "type": "color",
+        "label": "Ticker Background Color",
+        "value": "#0f3460"
+      }
     },
     "announcements": {
       "type": "collection",
       "label": "Announcements",
       "item_schema": {
-        "id": { "type": "text", "label": "ID" },
-        "title": { "type": "text", "label": "Title" },
-        "body": { "type": "textarea", "label": "Body Text" },
-        "card_color": { "type": "color", "label": "Card Accent Color" },
-        "card_image": { "type": "file", "label": "Card Image", "meta": { "accepted_formats": ["jpg","png","webp"], "path": "assets/" } }
+        "id": {
+          "type": "text",
+          "label": "ID"
+        },
+        "title": {
+          "type": "text",
+          "label": "Title"
+        },
+        "body": {
+          "type": "textarea",
+          "label": "Body Text"
+        },
+        "card_color": {
+          "type": "color",
+          "label": "Card Accent Color"
+        },
+        "card_image": {
+          "type": "file",
+          "label": "Card Image",
+          "meta": {
+            "accepted_formats": [
+              "jpg",
+              "png",
+              "webp"
+            ],
+            "path": "assets/"
+          }
+        }
       },
       "value": [
-        { "id": "ann_a1b2c3", "title": "Flash Sale Today", "body": "20% off all items until 6pm. Use code FLASH20 at checkout.", "card_color": "#e94560", "card_image": "assets/ann_a1b2c3_card_image_d4e5f6.jpg" },
-        { "id": "ann_d4e5f6", "title": "New Arrivals", "body": "Check out our fresh inventory just in — over 50 new products this week.", "card_color": "#0f3460", "card_image": "assets/ann_d4e5f6_card_image_g7h8i9.jpg" },
-        { "id": "ann_g7h8i9", "title": "Hours Update", "body": "We are now open until 9pm on weekdays. Saturday hours remain 10am–6pm.", "card_color": "#16213e", "card_image": "assets/ann_g7h8i9_card_image_j1k2l3.jpg" }
+        {
+          "id": "ann_d4e5f6",
+          "title": "New Arrivals",
+          "body": "Check out our fresh inventory just in — over 50 new products this week.",
+          "card_color": "#0f3460",
+          "card_image": "assets/ann_d4e5f6_card_image_g7h8i9.jpg"
+        },
+        {
+          "id": "ann_a1b2c3",
+          "title": "Flash Sale Today",
+          "body": "20% off all items until 6pm. Use code FLASH20 at checkout.",
+          "card_color": "#e94560",
+          "card_image": "assets/ann_a1b2c3_card_image_d4e5f6.jpg"
+        },
+        {
+          "id": "ann_g7h8i9",
+          "title": "Hours Update",
+          "body": "We are now open until 9pm on weekdays. Saturday hours remain 10am–6pm.",
+          "card_color": "#16213e",
+          "card_image": "assets/ann_g7h8i9_card_image_j1k2l3.jpg"
+        }
       ]
     }
   }
