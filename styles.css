@@ -1,0 +1,219 @@
+:root {
+  /* No data-driven properties here, populated by JS */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #111;
+  color: #fff;
+  overflow: hidden; /* Designed to fit on screen / handle its own scrolling */
+}
+
+#app-container {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#app-container.loaded {
+  opacity: 1;
+}
+
+/* SECTION 1 — Top Bar */
+.top-bar {
+  background-color: var(--primary-color);
+  color: var(--header-text-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.date-display {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* SECTION 2 — Clock Widget */
+.clock-widget {
+  background-color: var(--accent-color);
+  padding: 1.5rem;
+  text-align: center;
+  color: #ffffff; /* Typically white over accent */
+}
+
+.clock-time {
+  font-size: 5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.clock-label {
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+/* SECTION 4 — Hero Banner */
+.hero-banner {
+  background-size: cover;
+  background-position: center;
+  background-color: #333; /* Fallback */
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-banner h2 {
+  font-size: 3.5rem;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.hero-banner p {
+  font-size: 1.75rem;
+  margin: 0;
+  color: #f1f1f1;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+/* SECTION 5 — Announcement Cards */
+.announcements-section {
+  flex: 1;
+  padding: 2.5rem;
+  background-color: #1a1a1a;
+  overflow-y: auto;
+}
+
+/* Layout Mode: GRID */
+.display_mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.display_mode-grid .announcement-card {
+  flex-direction: column;
+}
+
+.display_mode-grid .card-image-wrap {
+  width: 100%;
+  height: 220px;
+}
+
+/* Layout Mode: LIST */
+.display_mode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.display_mode-list .announcement-card {
+  flex-direction: row;
+  height: 200px;
+}
+
+.display_mode-list .card-image-wrap {
+  width: 300px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.display_mode-list .card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Base Card Styles */
+.announcement-card {
+  background-color: #2a2a2a;
+  /* border-left set via CSS variable per-card */
+  border-left: 8px solid var(--card-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.card-content h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.8rem;
+  color: var(--card-color); /* uses the same custom prop for title color */
+}
+
+.card-content p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+/* SECTION 3 — Ticker */
+.ticker-strip {
+  background-color: var(--ticker-bg-color);
+  color: #ffffff;
+  padding: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+.ticker-content {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  /* Start completely off-screen to the right */
+  padding-left: 100vw;
+  animation: ticker-scroll 25s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}

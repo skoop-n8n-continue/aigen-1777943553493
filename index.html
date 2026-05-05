@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Preview Test Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+
+    <!-- SECTION 1 — Top Bar -->
+    <header class="top-bar">
+      <h1 class="app-title">Live Preview Test Panel</h1>
+      <div class="date-display" id="date-display"></div>
+    </header>
+
+    <!-- SECTION 2 — Clock Widget -->
+    <!-- The show/hide binding is directly on the container -->
+    <div class="clock-widget" data-bind-show="app_settings.show_clock">
+      <div class="clock-time" id="clock-time">00:00:00</div>
+      <div class="clock-label">Local Time</div>
+    </div>
+
+    <!-- SECTION 4 — Hero Banner -->
+    <!-- Hero banner is always visible, uses data-bind-bg-image -->
+    <section class="hero-banner" data-bind-bg-image="app_settings.hero_image">
+      <div class="hero-content">
+        <h2 data-bind-text="app_settings.hero_headline" data-bind-color="app_settings.hero_text_color"></h2>
+        <p data-bind-text="app_settings.hero_subtitle"></p>
+      </div>
+    </section>
+
+    <!-- SECTION 5 — Announcement Cards -->
+    <!-- Data-bind-show handles whether the whole section is visible -->
+    <section class="announcements-section" data-bind-show="app_settings.show_announcements">
+      <!-- Data-bind-class switches between .display_mode-grid and .display_mode-list -->
+      <div id="announcements-container" class="announcements-container" data-bind-class="app_settings.display_mode">
+        <!-- Cards are injected here by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 3 — Scrolling Ticker -->
+    <!-- Using position fixed to always keep it at the bottom of the screen if needed, or flex layout -->
+    <div class="ticker-strip" data-bind-show="app_settings.show_ticker">
+      <div class="ticker-content" data-bind-text="app_settings.ticker_message"></div>
+    </div>
+
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
