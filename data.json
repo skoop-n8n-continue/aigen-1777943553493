@@ -11,7 +11,7 @@
       "show_ticker": {
         "type": "boolean",
         "label": "Show Ticker",
-        "value": true
+        "value": false
       },
       "show_announcements": {
         "type": "boolean",
