@@ -1,5 +1,46 @@
 'use strict';
 
+// ---------------------------------------------------------------------------
+// Fetch shim — intercepts fetch('data.json') for two purposes:
+//   1. Tier 2 srcdoc preview: when __skoop_dirty_data__ is set (injected by
+//      the configurator into the srcdoc <head>), return it directly so the
+//      page renders unsaved changes without an S3 round-trip.
+//   2. Normal S3 load: stash the real data.json response in
+//      __skoop_initial_data__ so the runtime can apply all data-bind-*
+//      bindings (including show/hide) automatically after init() finishes.
+// This shim is in skoop-live.js (not an inline <script>) so it is always
+// fresh on each deployment — no stale code risk from agent-copied HTML.
+// ---------------------------------------------------------------------------
+(function () {
+  var dirty = window.__skoop_dirty_data__;
+  var origFetch = window.fetch ? window.fetch.bind(window) : null;
+  window.fetch = function (input, init) {
+    try {
+      var url = typeof input === 'string' ? input : (input && input.url) || '';
+      if (/(^\.\/)?(data\.json)(\?.*)?$/.test(url) || /(^|\/)data\.json(\?.*)?$/.test(url)) {
+        if (dirty) {
+          window.__skoop_initial_data__ = dirty;
+          var body = JSON.stringify(dirty);
+          return Promise.resolve(new Response(body, {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        }
+        // Normal load: pass through and stash the response data
+        var p = origFetch ? origFetch(input, init) : Promise.reject(new Error('fetch unavailable'));
+        return p.then(function (response) {
+          var cloned = response.clone();
+          cloned.json().then(function (data) {
+            window.__skoop_initial_data__ = data;
+          }).catch(function () {});
+          return response;
+        });
+      }
+    } catch (e) {}
+    return origFetch ? origFetch(input, init) : Promise.reject(new Error('fetch unavailable'));
+  };
+})();
+
 /**
  * Skoop Live Preview Runtime
  *
