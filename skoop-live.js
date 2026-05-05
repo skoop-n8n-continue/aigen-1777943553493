@@ -523,44 +523,11 @@
     loadedObs.observe(appEl, { attributes: true, attributeFilter: ['class'] });
   }
 
-  // After the page's own init() has built the DOM, report which data paths are
-  // wired to data-bind-show / data-bind-hide attributes to the parent builder.
-  // The builder uses this to decide whether a field change that *shows* an
-  // element needs a Tier 2 reload (because init() may have conditionally skipped
-  // setup for that element when the value was falsy).
-  // Sent on every page load — both the initial S3 load and each srcdoc reload.
-  function reportShowHidePaths() {
-    try {
-      if (window.parent && window.parent !== window) {
-        var showEls = document.querySelectorAll('[data-bind-show]');
-        var hideEls = document.querySelectorAll('[data-bind-hide]');
-        var showPaths = [];
-        var hidePaths = [];
-        for (var si = 0; si < showEls.length; si++) {
-          var sp = showEls[si].getAttribute('data-bind-show');
-          if (sp && showPaths.indexOf(sp) === -1) showPaths.push(sp);
-        }
-        for (var hi = 0; hi < hideEls.length; hi++) {
-          var hp = hideEls[hi].getAttribute('data-bind-hide');
-          if (hp && hidePaths.indexOf(hp) === -1) hidePaths.push(hp);
-        }
-        window.parent.postMessage({
-          type: 'skoop:show_hide_paths',
-          showPaths: showPaths,
-          hidePaths: hidePaths,
-        }, '*');
-      }
-    } catch (_) { /* cross-origin or no parent — skip */ }
-  }
-
   // Run after the page's main script has had a chance to build the DOM
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setTimeout(function() { applyFromInjectedOrFetch(); reportShowHidePaths(); }, 0);
+    setTimeout(applyFromInjectedOrFetch, 0);
   } else {
-    document.addEventListener('DOMContentLoaded', function() {
-      applyFromInjectedOrFetch();
-      reportShowHidePaths();
-    });
+    document.addEventListener('DOMContentLoaded', applyFromInjectedOrFetch);
   }
 
   // Listen for postMessage updates from the parent configurator
